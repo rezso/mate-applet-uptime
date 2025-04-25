@@ -59,60 +59,15 @@ fi
 
 ### Checks for libraries.
 LIBMATEPANELAPPLET="no"
-PKG_CHECK_MODULES([LIBMATEPANELAPPLET_4], [libmatepanelapplet-4.0], [LIBMATEPANELAPPLET="libmatepanelapplet-4.0"], [
-        PKG_CHECK_MODULES([LIBMATEPANELAPPLET_3], [libmatepanelapplet-3.0], [LIBMATEPANELAPPLET="libmatepanelapplet-3.0"], [
-                PKG_CHECK_MODULES([LIBMATEPANELAPPLET_2], [libmatepanelapplet-2.0], [LIBMATEPANELAPPLET="libmatepanelapplet-2.0"], [
-                        AC_MSG_ERROR(["*** libmatepanelapplet not found."])
-                ])
-        ])
-])
+PKG_CHECK_MODULES([LIBMATEPANELAPPLET_4], [libmatepanelapplet-4.0], [LIBMATEPANELAPPLET="libmatepanelapplet-4.0"])
 
 # Check for GTK and determine version
-FORCE_GTK="no"
-RPM_REQUIRE_GTK=" "
-USE_GTK="0"
-AC_ARG_ENABLE([gtk],[AS_HELP_STRING([--enable-gtk],[compile only for the specified GTK version, 2 or 3 (default: check both, use GTK-3, if not found, use GTK-2))])],[FORCE_GTK=$enableval])
+PKG_CHECK_MODULES([PKG_GTK3], [gtk+-3.0 >= 3.14.0])
 
-PKG_CHECK_MODULES([PKG_GTK2], [gtk+-2.0], [FOUND_GTK2="1"], [FOUND_GTK2="0"])
-PKG_CHECK_MODULES([PKG_GTK3], [gtk+-3.0], [FOUND_GTK3="1"], [FOUND_GTK3="0"])
-
-if test $FORCE_GTK = "3" ; then
-	if test $FOUND_GTK3 = "1" ; then
-		AM_PATH_GTK_3_0([3.0.0], [USE_GTK="3"], [AC_MSG_ERROR(["*** GTK3 forced, but not found."])])
-	else
-		AC_MSG_ERROR(["*** GTK3 forced, but not found."])
-	fi
-elif test $FORCE_GTK = "2" ; then
-	if test $FOUND_GTK2 = "1" ; then
-		AM_PATH_GTK_2_0([2.24.0], [USE_GTK="2"], [AC_MSG_ERROR(["*** GTK2 forced, but not found."])])
-	else
-		AC_MSG_ERROR(["*** GTK2 forced, but not found."])
-	fi
-else
-	if test $FOUND_GTK3 = "1" ; then
-		AM_PATH_GTK_3_0([3.14.0], [USE_GTK="3"], [USE_GTK="0"])
-	elif test $FOUND_GTK2 = "1" ; then
-		AM_PATH_GTK_2_0([2.24.0], [USE_GTK="2"], [USE_GTK="0"])
-	fi
-fi
-
-if test $USE_GTK = "3" ; then
-	AC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
-	AC_DEFINE([GETTEXT_PACKAGE], ["gtk30"], ["GTK gettext"])
-	AC_SUBST([GETTEXT_PACKAGE])
-	RPM_REQUIRE_GTK="Requires: gtk3 >= 3.14.0"
-	RPM_BUILDREQUIRE_GTK="Requires: gtk3 >= 3.14.0"
-	SELECTED_GTK="GTK-3"
-elif test $USE_GTK = "2" ; then
-	AC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
-	AC_DEFINE([GETTEXT_PACKAGE], ["gtk20"], ["GTK gettext"])
-	AC_SUBST([GETTEXT_PACKAGE])
-	RPM_REQUIRE_GTK="Requires: gtk2 >= 2.24.0"
-	RPM_BUILDREQUIRE_GTK="Requires: gtk2-devel >= 2.24.0"
-	SELECTED_GTK="GTK-2"
-else
-	AC_MSG_ERROR(["*** GTK not found."])
-fi
+AC_DEFINE([GETTEXT_PACKAGE], ["gtk30"], ["GTK gettext"])
+AC_SUBST([GETTEXT_PACKAGE])
+RPM_REQUIRE_GTK="Requires: gtk3 >= 3.14.0"
+RPM_BUILDREQUIRE_GTK="Requires: gtk3 >= 3.14.0"
 
 AC_SUBST([RPM_REQUIRE_GTK])
 AC_SUBST([RPM_BUILDREQUIRE_GTK])

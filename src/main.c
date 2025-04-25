@@ -31,12 +31,7 @@ void applet_destroy(MatePanelApplet *applet_widget, UptimeApplet *applet) {
 }
 
 
-#ifdef HAVE_GTK2
-void applet_back_change (MatePanelApplet *a, MatePanelAppletBackgroundType type, GdkColor *color, GdkPixmap *pixmap, UptimeApplet *applet) {
-#elif HAVE_GTK3
 void applet_back_change (MatePanelApplet *a, MatePanelAppletBackgroundType type, GdkRGBA *color, cairo_pattern_t *pattern, UptimeApplet *applet) {
-#endif
-
 	// Use MATE-provided wrapper to change the background (same for both GTK2 and GTK3)
 	mate_panel_applet_set_background_widget (a, GTK_WIDGET(applet->applet));
 	//mate_panel_applet_set_background_widget (a, GTK_WIDGET(applet->event_box));
@@ -142,11 +137,7 @@ static gboolean uptime_applet_factory(MatePanelApplet *applet_widget, const gcha
 	applet->gsettings = g_settings_new_with_path(APPLET_GSETTINGS_SCHEMA, APPLET_GSETTINGS_PATH);
 	applet->format = g_settings_get_int(applet->gsettings, APPLET_GSETTINGS_KEY_FORMAT);
 	
-#ifdef HAVE_GTK2
-	applet->vbox = gtk_vbox_new (FALSE, 0);
-#elif HAVE_GTK3
 	applet->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#endif
 
 	char msg_top[128];
 	sprintf(&msg_top[0], "%s%s%s", "<span font_desc=\"8.0\">", _("uptime"), "</span>");
@@ -175,11 +166,7 @@ static gboolean uptime_applet_factory(MatePanelApplet *applet_widget, const gcha
 	g_signal_connect(G_OBJECT(applet_widget), "destroy", G_CALLBACK(applet_destroy), (gpointer)applet);
 	g_signal_connect(G_OBJECT(applet_widget), "change_background", G_CALLBACK (applet_back_change), (gpointer)applet);
 
-#ifdef HAVE_GTK2
-	g_timeout_add(60000, (GtkFunction) applet_check_uptime, (gpointer)applet);
-#elif HAVE_GTK3
 	g_timeout_add(60000, (GSourceFunc) applet_check_uptime, (gpointer)applet);
-#endif
 
 	return TRUE;
 }

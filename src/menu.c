@@ -53,11 +53,7 @@ void about_cb (GtkAction *action, UptimeApplet *applet) {
 	snprintf(&image_file[0], 1023, "%s/%s", APPLET_ICON_PATH, "applet_uptime.32.png");
 	gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG(about), gtk_image_get_pixbuf(GTK_IMAGE(gtk_image_new_from_file (image_file))));
 
-#ifdef HAVE_GTK2
-	gtk_about_dialog_set_license (GTK_ABOUT_DIALOG(about), "GPL v. 2 or later");
-#elif HAVE_GTK3
 	gtk_about_dialog_set_license_type (GTK_ABOUT_DIALOG(about), GTK_LICENSE_GPL_2_0);
-#endif
 
 	gtk_dialog_run (GTK_DIALOG(about));
 	gtk_widget_destroy(about);
@@ -105,11 +101,7 @@ void settings_cb (GtkAction *action, UptimeApplet *applet) {
 	g_signal_connect (G_OBJECT(format_combo), "changed", G_CALLBACK (settings_cb_action), (gpointer) applet);
 
 	GtkWidget *format_vbox_1;
-#ifdef HAVE_GTK2
-	format_vbox_1 = gtk_vbox_new (FALSE, 0);
-#elif HAVE_GTK3
 	format_vbox_1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#endif
 
 	gtk_box_pack_start(GTK_BOX(format_vbox_1), format_label, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(format_vbox_1), format_combo, FALSE, FALSE, 0);
@@ -120,11 +112,7 @@ void settings_cb (GtkAction *action, UptimeApplet *applet) {
 
 	gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL);
 
-#ifdef HAVE_GTK2
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), format_vbox_1);
-#elif HAVE_GTK3
 	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), format_vbox_1);
-#endif
 
 	g_signal_connect (G_OBJECT(buttonClose), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
 
