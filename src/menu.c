@@ -108,7 +108,7 @@ void settings_cb (GtkAction *action, UptimeApplet *applet) {
 
 	// Assemble window
 	GtkWidget *quitDialog = gtk_dialog_new_with_buttons (_("Uptime Applet Settings"), GTK_WINDOW(applet), GTK_DIALOG_MODAL, NULL);
-	GtkWidget *buttonClose = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL);
+	GtkWidget *buttonClose = gtk_dialog_add_button (GTK_DIALOG(quitDialog), "_Close", GTK_RESPONSE_CANCEL);
 
 	gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL);
 
